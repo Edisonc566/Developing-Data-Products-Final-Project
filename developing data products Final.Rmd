@@ -1,0 +1,111 @@
+---
+title: "Developing Data Products Final Preject"
+author: "Edison"
+date: "5/4/2020"
+output: ioslides_presentation
+keep_md: yes
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Relation between MPG and horsepower
+
+Using the `mtcars` dataset in R, I plot the graph and preliminarily reveal the relationship
+between (`mpg`) and car horsepower (`hp`) controlling the trasmission type (`am`).
+
+## Data structure
+```{r str}
+data("mtcars")
+str(mtcars)
+```
+
+## Visualizing the Data
+
+```{r plot, echo=FALSE,warning=FALSE}
+suppressPackageStartupMessages(library(plotly))
+
+plot_ly(data = mtcars, x = ~hp, y = ~mpg, 
+        color = ~as.factor(am),
+        text = ~paste("HP: ", hp, '<br>MPG:', mpg),
+        type = "scatter", mode = "markers") %>%
+  layout(title = "Car Data",
+         xaxis = list(title = 'HP'),
+         yaxis = list(title = 'MPG'))
+
+```
+
+## MPG prediction
+
+```{r pred}
+reg <- lm(mpg ~ am + hp, mtcars); summary(reg)
+```
+
+## Visualizing the Data with Shiny widget
+
+```{r echo=FALSE}
+library(shiny)
+
+callwidget <- function(){
+  
+shinyApp(
+  
+ui = (fluidPage(
+    titlePanel("Predict MPG from Horsepower"),
+    sidebarLayout(
+        sidebarPanel(
+            sliderInput("sliderHP", "What is the horsepower of the car?", 50, 335, value = 100),
+            checkboxInput("checkMT", "Manual Transmission", value = TRUE),
+            
+        ),
+        mainPanel(
+            plotOutput("plot1"),
+            h3("Predicted MPG from Horsepower:"),
+            textOutput("pred1"),
+            
+        )
+    )
+)),
+
+server = function(input, output) {
+    
+    
+        
+    model1 <- lm(mpg ~ am + hp, data = mtcars)
+
+
+    model1pred <- reactive({
+        ifelse(input$checkMT,(mt <- 1), (mt <- 0))
+        hpInput <- input$sliderHP
+        predict(model1, newdata = data.frame(am = mt, hp = hpInput))
+    })
+
+
+    output$plot1 <- renderPlot({
+        hpInput <- input$sliderHP
+
+        plot(mtcars$hp, mtcars$mpg, ylab = "Miles Per Gallon",
+             xlab = "Horsepower", bty = "n", pch = 16,
+             xlim = c(50, 350), ylim = c(1, 35))
+        abline(model1, col = "red", lwd = 2)
+
+        legend(25, 250, c("Model Prediction"), pch = 16,
+               col = c("red"), bty = "n", cex = 1.2)
+        points(hpInput, model1pred(), col = "red", pch = 16, cex = 2)
+    })
+
+    output$pred1 <- renderText({
+        c(round(model1pred(),4),"miles per gallon")
+    })
+    
+}
+)
+}
+callwidget()
+```
+
+
+
+## Thank you!

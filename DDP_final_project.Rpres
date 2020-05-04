@@ -1,0 +1,48 @@
+DDP Final Project
+========================================================
+author: Edison
+date: 5/4/2020
+autosize: true
+
+Relation between MPG and horsepower
+========================================================
+
+
+
+Using the `mtcars` dataset in R, I plot the graph and preliminarily reveal the relationship
+between (`mpg`) and car horsepower (`hp`) controlling the trasmission type (`am`).
+
+Data structure
+========================================================
+
+```{r str}
+data("mtcars")
+str(mtcars)
+```
+
+Visualizing the Data
+========================================================
+
+```{r plot, echo=FALSE,warning=FALSE}
+suppressPackageStartupMessages(library(ggplot2))
+qplot(data = mtcars
+      , x = hp
+      , y = mpg
+      ,color = factor(am)
+      ,geom=c("point", "line")
+      ,main = "Car Data"
+      ,   xlab = 'HP'
+      ,  ylab = 'MPG')  
+
+```
+
+
+MPG prediction
+========================================================
+```{r pred}
+reg <- lm(mpg ~ am + hp, mtcars); summary(reg)
+```
+
+
+Thank you!
+========================================================
