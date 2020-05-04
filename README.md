@@ -12,9 +12,11 @@ This is the final project slidify presentation source code for the Developing Da
 
 1. Shiny App: [Link]( https://edisonshinyappstest.shinyapps.io/DDP_FinalProject/ )
 
-2. `server.R` and `ui.R` files: [Link](https://)
+2. `server.R` and `ui.R` files: [Link](https://github.com/Edisonc566/Developing-Data-Products-Final-Project)
 
-3. R Presentation: [Link](  https://edisonshinyappstest.shinyapps.io/DDPwidget01/ )
+3. R Presentation without Shiny widget: [Link](  https://edisonshinyappstest.shinyapps.io/DDPwidget01/ )
+
+4. R Pres without Shiny widget: [Link](https://github.com/Edisonc566/Developing-Data-Products-Final-Project/blob/master/DDP_final_project.Rpres)
 
 
 
